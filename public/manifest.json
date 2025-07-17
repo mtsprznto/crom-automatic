@@ -1,0 +1,22 @@
+{
+    "theme_color": "#090708",
+    "background_color": "#090708",
+    "orientation": "portrait",
+    "display": "standalone",
+    "dir": "auto",
+    "lang": "es-ES",
+    "name": "CROM | Automatización",
+    "short_name": "crom",
+    "scope": "/",
+    "description": "CROM | Automatización",
+    "id": "https://crom.vercel.app/",
+    "start_url": "https://crom.vercel.app/",
+    "icons": [
+        {
+            "purpose": "maskable",
+            "sizes": "512x512",
+            "src": "images/icono.png",
+            "type": "image/png"
+        }
+    ]
+}

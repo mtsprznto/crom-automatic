@@ -11,8 +11,8 @@ const poppins = Poppins({
 
 
 export const metadata: Metadata = {
-  title: "Publicar class Room",
-  description: "App publicar en classroom",
+  title: "CROM | Automatización",
+  description: "App publicar publicar en classroom",
   manifest:"/manifest.json"
 };
 
