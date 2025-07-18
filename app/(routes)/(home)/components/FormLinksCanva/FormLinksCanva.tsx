@@ -139,7 +139,7 @@ export const FormLinksCanva = () => {
                 </p>
               </div>
               <div className="flex items-center gap-2 align-center justify-center ">
-                <span>
+                <span onClick={() => window.open("https://classroom.google.com", "_blank")}>
                   <Tooltip>
                     <TooltipTrigger className="cursor-pointer">
                       <Image
