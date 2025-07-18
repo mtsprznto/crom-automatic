@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { formatearFechaIso } from "@/lib/utils/formatear_fecha";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -30,12 +31,13 @@ export const CardCoursesView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const urlApiObtenerId =
+    "https://bot-cami-classroom.vercel.app/obtener_ids_cursos";
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await fetch(
-          "https://bot-cami-classroom.vercel.app/obtener_ids_cursos"
-        );
+        const res = await fetch(urlApiObtenerId);
         const data: CursosResponse = await res.json();
 
         if ("cursos" in data) {
@@ -53,7 +55,7 @@ export const CardCoursesView = () => {
     };
 
     fetchCourses();
-  }, []);
+  }, [urlApiObtenerId]);
 
   return (
     <div className="md:px-6 md:py-3 w-full md:max-w-[1000px] mx-auto md:px-0 ">
@@ -76,14 +78,23 @@ export const CardCoursesView = () => {
             <Card key={course.id}>
               <CardHeader>
                 <CardTitle>{course.name}</CardTitle>
-                <CardDescription>ID del curso</CardDescription>
+                <CardDescription className="text-[10px]">
+                  Fecha de actualización: {formatearFechaIso(course.updateTime)}
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">{course.id}</p>
+              <CardContent className="h-full">
+                <div className="flex items-center justify-start gap-1">
+                  <p className="text-sm text-muted-foreground">ID:</p>
+                  <p className="text-sm text-muted-foreground">{course.id}</p>
+                </div>
               </CardContent>
               <CardFooter>
                 {/* Link de classroom google */}
-                <Link href={course.links_courses} className="p-0 py-0" target="_blank">
+                <Link
+                  href={course.links_courses}
+                  className="p-0 py-0"
+                  target="_blank"
+                >
                   <Button className="text-[10px] px-2 py-0 bg-eggplant-950 hover:bg-eggplant-500 transition duration-300 cursor-pointer">
                     Ver curso
                   </Button>

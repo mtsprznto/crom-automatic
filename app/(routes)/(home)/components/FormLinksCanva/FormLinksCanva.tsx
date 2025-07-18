@@ -24,14 +24,17 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
+import Image from "next/image";
+import { ConfirmarPublicaciónModal } from "./ConfirmarPublicacionModal";
 
 export const FormLinksCanva = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [authUrl, setAuthUrl] = useState<string | null>(null);
+  const [mostrarModal, setMostrarModal] = useState(false);
 
-
-  const urlApiValidador = "https://bot-cami-classroom.vercel.app/obtener_ids_cursos"
-  const urlApiPublicador = "https://bot-cami-classroom.vercel.app/publicar"
+  const urlApiPublicador = "https://bot-cami-classroom.vercel.app/publicar";
+  const urlApiValidador =
+    "https://bot-cami-classroom.vercel.app/obtener_ids_cursos";
 
   const form = useForm<FormLinksType>({
     resolver: zodResolver(FormLinksSchema),
@@ -45,23 +48,20 @@ export const FormLinksCanva = () => {
   });
 
   const etiquetasPersonalizadas: Record<keyof FormLinksType, string> = {
-    canva_4: "4° básicos",
-    canva_5: "5° básicos",
-    canva_5_proyecto: "Proyecto 5°",
-    canva_5_orientacion: "Orientación 5°",
-    canva_6: "6° básicos",
+    canva_4: "4°(A/B) básicos",
+    canva_5: "5°(A/B) básicos",
+    canva_5_orientacion: "5°B orientación/tutoría",
+    canva_5_proyecto: "5°(A/B) Proyecto",
+    canva_6: "6°(A/B) básicos",
   };
 
   // Validar token antes de mostrar formulario
   useEffect(() => {
     const validarToken = async () => {
       try {
-        const res = await fetch(
-          urlApiValidador
-        );
+        const res = await fetch(urlApiValidador);
         const result = await res.json();
-        
-        
+
         if (result.status === "oauth_required" && result.auth_url) {
           setAuthUrl(result.auth_url);
         }
@@ -72,21 +72,18 @@ export const FormLinksCanva = () => {
     };
 
     validarToken();
-  }, []);
+  }, [urlApiValidador]);
 
   const onSubmit = async (values: FormLinksType) => {
     setIsLoading(true);
     try {
-      const res = await fetch(
-        urlApiPublicador,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        }
-      );
+      const res = await fetch(urlApiPublicador, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
 
       const result = await res.json();
 
@@ -141,21 +138,45 @@ export const FormLinksCanva = () => {
                   Publicar anuncio de la semana en classroom
                 </p>
               </div>
-              <span
-                className="text-eggplant-700 cursor-pointer"
-                onClick={() =>
-                  window.open("https://www.canva.com/projects", "_blank")
-                }
-              >
-                <Tooltip>
-                  <TooltipTrigger className="cursor-pointer">
-                    <SquareArrowUpRight className="w-2 h-2 md:w-5 md:h-5" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Ir a canva.com</p>
-                  </TooltipContent>
-                </Tooltip>
-              </span>
+              <div className="flex items-center gap-2 align-center justify-center ">
+                <span>
+                  <Tooltip>
+                    <TooltipTrigger className="cursor-pointer">
+                      <Image
+                        src="https://www.gstatic.com/classroom/logo_square_rounded.svg"
+                        alt="Logo"
+                        width={50}
+                        height={50}
+                        className="w-7 h-7 hover:translate-y-[-2px] transition duration-300"
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Ir a classroom.google.com</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </span>
+                <span
+                  className="text-eggplant-700 cursor-pointer"
+                  onClick={() =>
+                    window.open("https://www.canva.com/projects", "_blank")
+                  }
+                >
+                  <Tooltip>
+                    <TooltipTrigger className="cursor-pointer">
+                      <Image
+                        src="https://static.canva.com/web/images/8439b51bb7a19f6e65ce1064bc37c197.svg"
+                        alt="Logo"
+                        width={50}
+                        height={50}
+                        className="w-7 h-7 hover:translate-y-[-2px] transition duration-300"
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Ir a canva.com</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </span>
+              </div>
             </div>
           </div>
           <div className="w-full h-[1px] bg-eggplant-400 rounded-t-[10px] mb-3"></div>
@@ -175,6 +196,7 @@ export const FormLinksCanva = () => {
                         <FormLabel className="capitalize">
                           {etiquetasPersonalizadas[key as keyof FormLinksType]}
                         </FormLabel>
+
                         <span className="text-eggplant-700 cursor-pointer">
                           <Tooltip>
                             <TooltipTrigger>
@@ -205,11 +227,20 @@ export const FormLinksCanva = () => {
                   )}
                 />
               ))}
+              <ConfirmarPublicaciónModal
+                open={mostrarModal}
+                setOpen={setMostrarModal}
+                onConfirm={() => {
+                  setMostrarModal(false);
+                  form.handleSubmit(onSubmit)();
+                }}
+              />
 
               <Button
-                type="submit"
+                type="button"
                 disabled={isLoading}
-                className="w-full text-eggplant-50 bg-eggplant-950 mt-1 md:mt-3"
+                onClick={() => setMostrarModal(true)}
+                className="w-full text-eggplant-50 bg-eggplant-950 mt-1 md:mt-3 cursor-pointer"
               >
                 {isLoading && <Loader2 className="animate-spin h-4 w-4" />}
                 {isLoading ? "Publicando..." : "Publicar Anuncios"}
