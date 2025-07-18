@@ -10,14 +10,19 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormLinksSchema, FormLinksType } from "./FormLinksCanva.schema";
-import { CircleQuestionMark } from "lucide-react";
+import { CircleQuestionMark, SquareArrowUpRight } from "lucide-react";
 
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 
 export const FormLinksCanva = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +43,7 @@ export const FormLinksCanva = () => {
     canva_5: "5° básicos",
     canva_5_proyecto: "Proyecto 5°",
     canva_5_orientacion: "Orientación 5°",
-    canva_6: "6° básico",
+    canva_6: "6° básicos",
   };
 
   const onSubmit = async (values: FormLinksType) => {
@@ -83,15 +88,23 @@ export const FormLinksCanva = () => {
   };
 
   return (
-    <div className="px-6 py-3">
-      <div className="mb-2">
-        <h1 className="text-eggplant-950 text-[13px] md:text-xl">
-          Publicar anuncio
-        </h1>
-        <p className="text-[11px] md:text-sm text-eggplant-700">
-          Publicar anuncio de la semana en classroom
-        </p>
+    <div className="px-6 py-3 max-w-[1000px] mx-auto md:px-0">
+      <div className="mb-2 flex items-center justify-between">
+        <div className="flex items-center justify-between w-full">
+          <div className="flex flex-col">
+            <h1 className="text-eggplant-950 text-[13px] md:text-xl">
+              Publicar anuncio
+            </h1>
+            <p className="text-[11px] md:text-sm text-eggplant-700">
+              Publicar anuncio de la semana en classroom
+            </p>
+          </div>
+          <span className="text-eggplant-700 cursor-pointer">
+            <SquareArrowUpRight />
+          </span>
+        </div>
       </div>
+      <div className="w-full h-[1px] bg-eggplant-400 rounded-t-[10px]"></div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -105,11 +118,24 @@ export const FormLinksCanva = () => {
               render={({ field }) => (
                 <FormItem className="text-eggplant-950 bg-eggplant-200 px-3 py-3 rounded-[10px]">
                   <div className="flex items-center justify-between ">
-                    <FormLabel className="capitalize ">
+                    <FormLabel className="capitalize">
                       {etiquetasPersonalizadas[key as keyof FormLinksType]}
                     </FormLabel>
-                    <span className="text-eggplant-700">
-                      <CircleQuestionMark size={18} />
+                    <span className="text-eggplant-700 cursor-pointer">
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <CircleQuestionMark
+                            size={18}
+                            className="w-4 h-4 md:w-5 md:h-5"
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            Solo tienes que copiar el enlace que deseas publicar
+                            en ambos cursos.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
                     </span>
                   </div>
                   <FormControl className="border-b-[1px] border-eggplant-950 text-[11px] md:text-[14px]">
@@ -129,7 +155,7 @@ export const FormLinksCanva = () => {
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full text-eggplant-50 bg-eggplant-950"
+            className="w-full text-eggplant-50 bg-eggplant-950 mt-1 md:mt-3"
           >
             {isLoading && <Loader2 className="animate-spin h-4 w-4" />}
             {isLoading ? "Publicando..." : "Publicar Anuncios"}
