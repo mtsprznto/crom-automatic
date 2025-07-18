@@ -83,7 +83,7 @@ export const CardCoursesView = () => {
               </CardContent>
               <CardFooter>
                 {/* Link de classroom google */}
-                <Link href={course.links_courses} className="p-0 py-0">
+                <Link href={course.links_courses} className="p-0 py-0" target="_blank">
                   <Button className="text-[10px] px-2 py-0 bg-eggplant-950 hover:bg-eggplant-500 transition duration-300 cursor-pointer">
                     Ver curso
                   </Button>
