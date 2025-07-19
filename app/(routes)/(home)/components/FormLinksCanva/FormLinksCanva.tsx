@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormLinksSchema, FormLinksType } from "./FormLinksCanva.schema";
-import { CircleQuestionMark, SquareArrowUpRight } from "lucide-react";
+import { CircleQuestionMark } from "lucide-react";
 
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
